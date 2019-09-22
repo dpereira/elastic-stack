@@ -29,3 +29,21 @@ If not already created `.env` files are initialized in the `stack` directory:
 
 These files can be used to customize the configuration of that specific stack component.
 Some are already provided when default config settings are required for the component execution.
+
+To use the instances just:
+
+ - Elasticsearch: http://localhost:9200
+ - Kibana: http://localhost:5601
+
+# Custom Ports
+
+If you want to run multiple instances, or for any reason change the default ports, set the following variables:
+
+- `ELASTICSEARCH_PORT`
+- `KIBANA_PORT`
+
+E.g.:
+
+```
+$ ELASTICSEARCH_PORT=9299 KIBANA_PORT=5699 make run
+```

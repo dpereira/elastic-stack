@@ -2,6 +2,14 @@
 
 Sandbox repository for playing around with Elastic Stack projects.
 
+## Setup
+
+You'll need some python 3+. And:
+
+```
+$ make setup
+```
+
 ## Usage
 
 ```

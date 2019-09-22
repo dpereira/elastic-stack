@@ -1,5 +1,8 @@
 .PHONY: run_% run
 
+setup:
+	pip install -r requirements.txt
+
 run: run_7.3.2
 
 run_%: ENV_FILE_VERSION=`echo $* | sed 's/\([0-9]*\).*/\1/g'`

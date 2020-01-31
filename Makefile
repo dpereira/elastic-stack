@@ -3,6 +3,9 @@
 setup:
 	pip install -r requirements.txt
 
+setup_vm_max_map_count:
+	sudo sysctl -w vm.max_map_count=262144
+
 run: run_7.3.2
 
 run_%: ENV_FILE_VERSION=`echo $* | sed 's/\([0-9]*\).*/\1/g'`

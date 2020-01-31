@@ -10,6 +10,17 @@ You'll need some python 3+. And:
 $ make setup
 ```
 
+Current versions of Elasticsearch require a higher `vm.max_map_count` setting then some OS's specify. To workaround
+that issue, you can run
+
+```
+$ make setup_vm_max_map_count
+```
+
+Which will sudo and run _sysctl_ for setting that configuration with an acceptable value. You can do that yourself,
+however. Take a look at the [documentation](https://www.elastic.co/guide/en/elasticsearch/reference/current/vm-max-map-count.html)
+in case of doubt on how to proceed.
+
 ## Usage
 
 ```

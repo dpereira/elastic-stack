@@ -27,7 +27,7 @@ services:
             context: custom/logstash
             network: host
         ports:
-            - "${LOGSTASH_PORT:-1984}:1984"
+            - "${LOGSTASH_PORT:-9600}:9600"
         networks:
             - stack
 

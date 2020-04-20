@@ -22,16 +22,31 @@ services:
         networks:
             - stack
 
-    logstash:
+    logstash-data-loader:
         build:
-            context: custom/logstash
+            context: custom/logstash-data-loader
             network: host
             args:
                 - LOGSTASH_VERSION=${LOGSTASH_VERSION:-7.3.2}
+        env_file: .env_logstash_${ENV_FILE_VERSION:-7}
         ports:
             - "${LOGSTASH_PORT:-9600}:9600"
         networks:
             - stack
+        volumes:
+            - ../data:/data
+
+
+    shell-template-loader:
+        build:
+            context: custom/shell-template-loader
+            network: host
+        networks:
+            - stack
+        volumes:
+            - ../index-templates:/index-templates
+            - ../bin:/stack-bin
+        entrypoint: bash /stack-bin/load-index-templates.sh /index-templates elasticsearch
 
 networks:
     stack:

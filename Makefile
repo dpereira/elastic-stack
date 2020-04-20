@@ -41,7 +41,7 @@ down_%:
 env_%: 
 	make stack/.env_elasticsearch_$(ENV_FILE_VERSION)
 	make stack/.env_kibana_$(ENV_FILE_VERSION)
-	make stack/.env_logstash_$(ENV_FILE_VERSION)
+	make stack/.env_logstash-data-loader_$(ENV_FILE_VERSION)
 
 stack/.env_%:
 	touch stack/.env_$*

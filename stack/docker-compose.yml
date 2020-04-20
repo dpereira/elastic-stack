@@ -28,7 +28,7 @@ services:
             network: host
             args:
                 - LOGSTASH_VERSION=${LOGSTASH_VERSION:-7.3.2}
-        env_file: .env_logstash_${ENV_FILE_VERSION:-7}
+        env_file: .env_logstash-data-loader_${ENV_FILE_VERSION:-7}
         ports:
             - "${LOGSTASH_PORT:-9600}:9600"
         networks:

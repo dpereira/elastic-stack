@@ -26,6 +26,8 @@ services:
         build:
             context: custom/logstash
             network: host
+            args:
+                - LOGSTASH_VERSION=${LOGSTASH_VERSION:-7.3.2}
         ports:
             - "${LOGSTASH_PORT:-9600}:9600"
         networks:

@@ -14,8 +14,20 @@ run_%: PROJECT_NAME=stack_`echo $* | sed 's/\./_/g'`
 run_%: env_%
 	ELASTICSEARCH_VERSION="$*" \
 	KIBANA_VERSION="$*" \
+	LOGSTASH_VERSION="$*" \
 	ENV_FILE_VERSION=$(ENV_FILE_VERSION) \
 	docker-compose -f stack/docker-compose.yml -p $(PROJECT_NAME) up
+
+build: build_7.6.2
+
+build_%: PROJECT_NAME=stack_`echo $* | sed 's/\./_/g'`
+
+build_%: env_%
+	ELASTICSEARCH_VERSION="$*" \
+	KIBANA_VERSION="$*" \
+	LOGSTASH_VERSION="$*" \
+	ENV_FILE_VERSION=$(ENV_FILE_VERSION) \
+	docker-compose -f stack/docker-compose.yml -p $(PROJECT_NAME) build
 
 down: down_7.6.2
 

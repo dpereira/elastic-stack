@@ -30,6 +30,13 @@ build_%: env_%
 	ENV_FILE_VERSION=$(ENV_FILE_VERSION) \
 	docker-compose -f stack/docker-compose.yml -p $(PROJECT_NAME) build
 
+stop: stop_7.6.2
+
+stop_%: PROJECT_NAME=stack_`echo $* | sed 's/\./_/g'`
+
+stop_%:
+	docker-compose -f stack/docker-compose.yml -p $(PROJECT_NAME) stop
+
 down: down_7.6.2
 
 down_%: PROJECT_NAME=stack_`echo $* | sed 's/\./_/g'`

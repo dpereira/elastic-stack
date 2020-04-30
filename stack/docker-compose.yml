@@ -2,17 +2,6 @@ version: '3.8'
 
 services:
 
-    kibana:
-        container_name: stack_kibana_${KIBANA_VERSION:-7.3.2}
-        image: docker.elastic.co/kibana/kibana:${KIBANA_VERSION:-7.3.2}
-        env_file: .env_kibana_${ENV_FILE_VERSION:-7}
-        environment:
-            - ELASTICSEARCH_HOSTS="http://elasticsearch:9200"
-        ports:
-            - "${KIBANA_PORT:-5601}:5601"
-        networks:
-            - stack
-
     elasticsearch:
         container_name: stack_elasticsearch_${ELASTICSEARCH_VERSION:-7.3.2}
         image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTICSEARCH_VERSION:-7.3.2}
@@ -21,6 +10,19 @@ services:
             - node.name="es-stack-1"
         ports:
             - "${ELASTICSEARCH_PORT:-9200}:9200"
+        networks:
+            - stack
+
+    kibana:
+        container_name: stack_kibana_${KIBANA_VERSION:-7.3.2}
+        image: docker.elastic.co/kibana/kibana:${KIBANA_VERSION:-7.3.2}
+        env_file: .env_kibana_${ENV_FILE_VERSION:-7}
+        environment:
+            - ELASTICSEARCH_HOSTS="http://elasticsearch:9200"
+        ports:
+            - "${KIBANA_PORT:-5601}:5601"
+        depends_on:
+            - elasticsearch
         networks:
             - stack
 
@@ -34,23 +36,27 @@ services:
         env_file: .env_logstash-data-loader_${ENV_FILE_VERSION:-7}
         ports:
             - "${LOGSTASH_PORT:-9600}:9600"
+        depends_on:
+            - elasticsearch
         networks:
             - stack
         volumes:
             - ../data:/data
 
 
-    shell-template-loader:
-        container_name: stack_shell-template-loader_${ELASTICSEARCH_VERSION:-7.3.2}
+    es-loader:
+        container_name: stack_es-loader_${ELASTICSEARCH_VERSION:-7.3.2}
         build:
-            context: custom/shell-template-loader
+            context: custom/es-loader
             network: host
+        depends_on:
+            - elasticsearch
         networks:
             - stack
         volumes:
             - ../index-templates:/index-templates
             - ../bin:/stack-bin
-        entrypoint: bash /stack-bin/load-index-templates.sh /index-templates elasticsearch
+        command: bash /stack-bin/init.sh /index-templates elasticsearch
 
 networks:
     stack:

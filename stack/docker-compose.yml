@@ -1,8 +1,9 @@
-version: '3'
+version: '3.8'
 
 services:
 
     kibana:
+        container_name: stack_kibana_${KIBANA_VERSION:-7.3.2}
         image: docker.elastic.co/kibana/kibana:${KIBANA_VERSION:-7.3.2}
         env_file: .env_kibana_${ENV_FILE_VERSION:-7}
         environment:
@@ -13,6 +14,7 @@ services:
             - stack
 
     elasticsearch:
+        container_name: stack_elasticsearch_${ELASTICSEARCH_VERSION:-7.3.2}
         image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTICSEARCH_VERSION:-7.3.2}
         env_file: .env_elasticsearch_${ENV_FILE_VERSION:-7}
         environment:
@@ -21,6 +23,34 @@ services:
             - "${ELASTICSEARCH_PORT:-9200}:9200"
         networks:
             - stack
+
+    logstash-data-loader:
+        container_name: stack_logstash-data-loader_${LOGSTASH_VERSION:-7.3.2}
+        build:
+            context: custom/logstash-data-loader
+            network: host
+            args:
+                - LOGSTASH_VERSION=${LOGSTASH_VERSION:-7.3.2}
+        env_file: .env_logstash-data-loader_${ENV_FILE_VERSION:-7}
+        ports:
+            - "${LOGSTASH_PORT:-9600}:9600"
+        networks:
+            - stack
+        volumes:
+            - ../data:/data
+
+
+    shell-template-loader:
+        container_name: stack_shell-template-loader_${ELASTICSEARCH_VERSION:-7.3.2}
+        build:
+            context: custom/shell-template-loader
+            network: host
+        networks:
+            - stack
+        volumes:
+            - ../index-templates:/index-templates
+            - ../bin:/stack-bin
+        entrypoint: bash /stack-bin/load-index-templates.sh /index-templates elasticsearch
 
 networks:
     stack:

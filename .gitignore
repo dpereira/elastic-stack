@@ -105,3 +105,9 @@ venv.bak/
 
 # ctags
 tags
+
+# templates
+index-templates/
+
+# data
+data/

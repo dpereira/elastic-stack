@@ -40,17 +40,17 @@ services:
             - ../data:/data
 
 
-    shell-template-loader:
-        container_name: stack_shell-template-loader_${ELASTICSEARCH_VERSION:-7.3.2}
+    es-loader:
+        container_name: stack_es-loader_${ELASTICSEARCH_VERSION:-7.3.2}
         build:
-            context: custom/shell-template-loader
+            context: custom/es-loader
             network: host
         networks:
             - stack
         volumes:
             - ../index-templates:/index-templates
             - ../bin:/stack-bin
-        entrypoint: bash /stack-bin/load-index-templates.sh /index-templates elasticsearch
+        command: bash /stack-bin/init.sh /index-templates elasticsearch
 
 networks:
     stack:

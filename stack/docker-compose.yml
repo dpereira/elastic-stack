@@ -9,7 +9,6 @@ services:
             network: host
             args:
                 - ELASTICSEARCH_VERSION=${ELASTICSEARCH_VERSION:-7.3.2}
-        image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTICSEARCH_VERSION:-7.3.2}
         env_file: .env_elasticsearch_${ENV_FILE_VERSION:-7}
         environment:
             - node.name="es-stack-1"

@@ -4,6 +4,11 @@ services:
 
     elasticsearch:
         container_name: stack_elasticsearch_${ELASTICSEARCH_VERSION:-7.3.2}
+        build:
+            context: custom/elasticsearch
+            network: host
+            args:
+                - ELASTICSEARCH_VERSION=${ELASTICSEARCH_VERSION:-7.3.2}
         image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTICSEARCH_VERSION:-7.3.2}
         env_file: .env_elasticsearch_${ENV_FILE_VERSION:-7}
         environment:
@@ -12,6 +17,10 @@ services:
             - "${ELASTICSEARCH_PORT:-9200}:9200"
         networks:
             - stack
+        volumes:
+            - type: bind
+              source: ../snapshots
+              target: /snapshots
 
     kibana:
         container_name: stack_kibana_${KIBANA_VERSION:-7.3.2}

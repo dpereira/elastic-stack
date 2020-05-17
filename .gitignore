@@ -111,3 +111,7 @@ index-templates/
 
 # data
 data/
+
+# vim
+*.swp
+*.swo

@@ -6,19 +6,20 @@ setup:
 setup_vm_max_map_count:
 	sudo sysctl -w vm.max_map_count=262144
 
-run: run_7.6.2
+run: run_7.7.0
 
 run_%: ENV_FILE_VERSION=`echo $* | sed 's/\([0-9]*\).*/\1/g'`
 run_%: PROJECT_NAME=stack_`echo $* | sed 's/\./_/g'`
 
 run_%: env_%
+	CURRENT_UID=`id -u`:`id -g` \
 	ELASTICSEARCH_VERSION="$*" \
 	KIBANA_VERSION="$*" \
 	LOGSTASH_VERSION="$*" \
 	ENV_FILE_VERSION=$(ENV_FILE_VERSION) \
 	docker-compose -f stack/docker-compose.yml -p $(PROJECT_NAME) up
 
-build: build_7.6.2
+build: build_7.7.0
 
 build_%: ENV_FILE_VERSION=`echo $* | sed 's/\([0-9]*\).*/\1/g'`
 build_%: PROJECT_NAME=stack_`echo $* | sed 's/\./_/g'`
@@ -30,14 +31,14 @@ build_%: env_%
 	ENV_FILE_VERSION=$(ENV_FILE_VERSION) \
 	docker-compose -f stack/docker-compose.yml -p $(PROJECT_NAME) build
 
-stop: stop_7.6.2
+stop: stop_7.7.0
 
 stop_%: PROJECT_NAME=stack_`echo $* | sed 's/\./_/g'`
 
 stop_%:
 	docker-compose -f stack/docker-compose.yml -p $(PROJECT_NAME) stop
 
-down: down_7.6.2
+down: down_7.7.0
 
 down_%: PROJECT_NAME=stack_`echo $* | sed 's/\./_/g'`
 

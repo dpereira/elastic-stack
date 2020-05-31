@@ -12,6 +12,7 @@ run_%: ENV_FILE_VERSION=`echo $* | sed 's/\([0-9]*\).*/\1/g'`
 run_%: PROJECT_NAME=stack_`echo $* | sed 's/\./_/g'`
 
 run_%: env_%
+	CURRENT_UID=`id -u`:`id -g` \
 	ELASTICSEARCH_VERSION="$*" \
 	KIBANA_VERSION="$*" \
 	LOGSTASH_VERSION="$*" \

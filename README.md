@@ -60,9 +60,10 @@ If you want to run multiple instances, or for any reason change the default port
 
 - `ELASTICSEARCH_PORT`
 - `KIBANA_PORT`
+- `LOGSTASH_PORT`
 
 E.g.:
 
 ```
-$ ELASTICSEARCH_PORT=9299 KIBANA_PORT=5699 make run
+$ ELASTICSEARCH_PORT=9299 KIBANA_PORT=5699 LOGSTASH_PORT=9699 make run
 ```

@@ -2,7 +2,8 @@
 	stack stack/.env_% down down_% env_% update_templates
 
 CURRENT_VERSION:=7.7.0
-CURRENT_UID:=`id -u`:`id -g`
+
+%: export CURRENT_UID:=$(shell echo -n `id -u`:`id -g`)
 
 ifndef VERSION
 VERSION:=$(CURRENT_VERSION)

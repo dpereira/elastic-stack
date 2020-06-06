@@ -1,2 +1,3 @@
 path.repo: ["/snapshots"]
+xpack.security.enabled: true
 

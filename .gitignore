@@ -115,3 +115,7 @@ data/
 # vim
 *.swp
 *.swo
+
+# security related
+passwords.txt
+keys.txt

@@ -49,5 +49,9 @@ env:
 stack/.env_%:
 	touch stack/.env_$*
 
+setup_passwords:
+	docker-compose -f stack/docker-compose.yml -p $(PROJECT_NAME) exec elasticsearch \
+		bash -c "yes | /usr/share/elasticsearch/bin/elasticsearch-setup-passwords auto" | grep PASSWORD > passwords.txt
+
 update_templates:
 	bash bin/load-index-templates.sh index-templates/ localhost

@@ -8,7 +8,8 @@ services:
             network: host
             args:
                 - ELASTICSEARCH_VERSION=${ELASTICSEARCH_VERSION:-7.3.2}
-        env_file: .env_elasticsearch_${ENV_FILE_VERSION:-7}
+        env_file: 
+            - .env_elasticsearch_${ENV_FILE_VERSION:-7}
         environment:
             - node.name="es-stack-1"
         ports:
@@ -22,8 +23,16 @@ services:
         user: ${CURRENT_UID}
 
     kibana:
-        image: docker.elastic.co/kibana/kibana:${KIBANA_VERSION:-7.3.2}
-        env_file: .env_kibana_${ENV_FILE_VERSION:-7}
+        build:
+            context: custom/kibana
+            network: host
+            args:
+                - KIBANA_VERSION=${KIBANA_VERSION:-7.3.2}
+                - KIBANA_PASS=${kibana}
+                - KIBANA_USER=kibana
+                - KIBANA_KEY=381d84e2ad314abf0f22e612a2cfa28e7062c8335848b7777c0c4bb1de81e15f
+        env_file: 
+            - .env_kibana_${ENV_FILE_VERSION:-7}
         environment:
             - ELASTICSEARCH_HOSTS="http://elasticsearch:9200"
         ports:
@@ -40,7 +49,8 @@ services:
             network: host
             args:
                 - LOGSTASH_VERSION=${LOGSTASH_VERSION:-7.3.2}
-        env_file: .env_logstash-data-loader_${ENV_FILE_VERSION:-7}
+        env_file:
+            - .env_logstash-data-loader_${ENV_FILE_VERSION:-7}
         ports:
             - "${LOGSTASH_PORT:-9600}:9600"
         depends_on:
@@ -51,6 +61,20 @@ services:
             - ../data:/data
         user: ${CURRENT_UID}
 
+    enterprise-search:
+        image: docker.elastic.co/enterprise-search/enterprise-search:7.7.0
+        depends_on:
+            - elasticsearch
+        environment:
+            - elasticsearch.host=http://elasticsearch:9200
+            - allow_es_settings_modification=true
+            - secret_management.encryption_keys=["381d84e2ad314abf0f22e612a2cfa28e7062c8335848b7777c0c4bb1de81e15f"]
+            - elasticsearch.username=elastic
+            - elasticsearch.password=${elastic}
+        ports:
+            - "${ENTERPRISE_SEARCH_PORT:-3002}:3002"
+        networks:
+            - stack
 
     es-loader:
         build:
@@ -64,6 +88,9 @@ services:
             - ../index-templates:/index-templates
             - ../bin:/stack-bin
         command: bash /stack-bin/init.sh /index-templates elasticsearch
+        environment:
+            - ES_USER=elastic
+            - ES_PASS=${elastic}
         user: ${CURRENT_UID}
 
 networks:

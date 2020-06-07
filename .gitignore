@@ -117,5 +117,5 @@ data/
 *.swo
 
 # security related
+.passwords.rc
 passwords.txt
-keys.txt

@@ -1,7 +1,7 @@
 .PHONY: run_% run build_% build stop_% stop setup setup_vm_max_map_count \
 	stack stack/.env_% down down_% env_% update_templates
 
-CURRENT_VERSION:=7.7.0
+CURRENT_VERSION:=7.8.0
 
 %: export CURRENT_UID:=$(shell echo -n `id -u`:`id -g`)
 

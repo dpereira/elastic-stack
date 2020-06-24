@@ -77,5 +77,24 @@ update_templates:
 clean: down
 	-rm passwords.txt .passwords.rc
 
-es-request: .passwords.rc
-	url=$(url) bash -c 'source .passwords.rc && curl http://elastic:$$elastic@localhost:9200/${url}'
+repository:
+	bash -c \
+		'source .passwords.rc &&  \
+		curl -XPUT http://elastic:$$elastic@localhost:9200/_snapshot/backup -d "{\"type\": \"fs\", \"settings\": {\"location\": \"backup\"}}" -H "Content-Type: application/json"'
+
+snapshot_%: repository
+	bash -c \
+		'source .passwords.rc &&  \
+		curl -XPUT http://elastic:$$elastic@localhost:9200/_snapshot/backup/$*?wait_for_completion=true -d "{\"indices\": \"*\"}" -H "Content-Type: application/json"'
+
+indices_%: INDICES=$(shell bash -c 'source .passwords.rc && curl http://elastic:$$elastic@localhost:9200/_cat/indices?h=i')
+
+indices_%:
+	@bash -c \
+		'source .passwords.rc && \
+		for i in $(INDICES); do echo $* $$i; curl -XPOST http://elastic:$$elastic@localhost:9200/$$i/_$*; echo; done'
+
+restore_%: repository indices_close
+	bash -c \
+		'source .passwords.rc && curl -XPOST http://elastic:$$elastic@localhost:9200/_snapshot/backup/$*/_restore?wait_for_completion=true'
+	make indices_open

@@ -77,12 +77,21 @@ update_templates:
 clean: down
 	-rm passwords.txt .passwords.rc
 
+save_passwords_%:
+	-mkdir passwords
+	cp .passwords.rc passwords/.$*_passwords.rc
+	cp passwords.txt passwords/$*_passwords.txt
+
+restore_passwords_%:
+	cp passwords/$*_passwords.rc .passwords.rc
+	cp passwords/$*_passwords.txt passwords.txt
+
 repository:
 	bash -c \
 		'source .passwords.rc &&  \
 		curl -XPUT http://elastic:$$elastic@localhost:9200/_snapshot/backup -d "{\"type\": \"fs\", \"settings\": {\"location\": \"backup\"}}" -H "Content-Type: application/json"'
 
-snapshot_%: repository
+snapshot_%: repository save_passwords_%
 	bash -c \
 		'source .passwords.rc &&  \
 		curl -XPUT http://elastic:$$elastic@localhost:9200/_snapshot/backup/$*?wait_for_completion=true -d "{\"indices\": \"*\"}" -H "Content-Type: application/json"'
@@ -98,3 +107,4 @@ restore_%: repository indices_close
 	bash -c \
 		'source .passwords.rc && curl -XPOST http://elastic:$$elastic@localhost:9200/_snapshot/backup/$*/_restore?wait_for_completion=true'
 	make indices_open
+	make restore_passwords_$*

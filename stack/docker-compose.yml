@@ -71,6 +71,7 @@ services:
             - secret_management.encryption_keys=["381d84e2ad314abf0f22e612a2cfa28e7062c8335848b7777c0c4bb1de81e15f"]
             - elasticsearch.username=elastic
             - elasticsearch.password=${elastic}
+            - ent_search.auth.source=elasticsearch-native
         ports:
             - "${ENTERPRISE_SEARCH_PORT:-3002}:3002"
         networks:

@@ -58,7 +58,7 @@ passwords.txt:
 	KIBANA_VERSION="$(VERSION)" \
 	LOGSTASH_VERSION="$(VERSION)" \
 	ENV_FILE_VERSION=$(ENV_FILE_VERSION) \
-	docker-compose -f stack/docker-compose.yml -p $(PROJECT_NAME) up -d elasticsearch
+	docker-compose -f stack/docker-compose.yml -p $(PROJECT_NAME) up -d --build elasticsearch
 	while true; \
 		do docker-compose -f stack/docker-compose.yml -p $(PROJECT_NAME) exec elasticsearch \
 		bash -c "yes | /usr/share/elasticsearch/bin/elasticsearch-setup-passwords auto" | grep PASSWORD > $@ && echo 'DONE!' && break || \

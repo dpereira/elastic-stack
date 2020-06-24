@@ -1,3 +1,9 @@
 path.repo: ["/snapshots"]
 xpack.security.enabled: true
-
+xpack:
+    security:
+        authc:
+            realms:
+                native:
+                    native1:
+                        order: 0

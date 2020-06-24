@@ -119,3 +119,7 @@ data/
 # security related
 .passwords.rc
 passwords.txt
+passwords/
+
+# snapshots
+snapshots/

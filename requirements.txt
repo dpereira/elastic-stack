@@ -4,7 +4,7 @@ cached-property==1.5.1
 certifi==2019.9.11
 cffi==1.12.3
 chardet==3.0.4
-cryptography==3.2
+cryptography==3.3.2
 docker==3.7.3
 docker-compose==1.25.5
 docker-pycreds==0.4.0

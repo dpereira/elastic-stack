@@ -11,6 +11,7 @@ services:
         env_file: .env_elasticsearch_${ENV_FILE_VERSION:-7}
         environment:
             - node.name="es-stack-1"
+            - cluster.initial_master_nodes="es-stack-1"
         ports:
             - "${ELASTICSEARCH_PORT:-9200}:9200"
         networks:

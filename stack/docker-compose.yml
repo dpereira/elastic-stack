@@ -10,12 +10,17 @@ services:
                 - ELASTICSEARCH_VERSION=${ELASTICSEARCH_VERSION:-7.3.2}
         env_file: .env_elasticsearch_${ENV_FILE_VERSION:-7}
         environment:
-            - node.name="es-stack-1"
-            - cluster.initial_master_nodes="es-stack-1"
+            - node.name=es-stack-1
+            - cluster.initial_master_nodes=es-stack-1
+            - ELASTIC_USERNAME=admin
+            - ELASTIC_PASSWORD=elastic
         ports:
             - "${ELASTICSEARCH_PORT:-9200}:9200"
         networks:
-            - stack
+          stack:
+            aliases:
+              - es-stack-1
+
         volumes:
             - type: bind
               source: ../snapshots

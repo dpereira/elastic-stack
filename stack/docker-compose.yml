@@ -28,7 +28,7 @@ services:
               target: /snapshots
 
     kibana:
-        image: docker.elastic.co/kibana/kibana:${KIBANA_VERSION:-7.3.2}
+        image: docker.elastic.co/kibana/kibana:${KIBANA_VERSION:-7.12.0}
         env_file: .env_kibana_${ENV_FILE_VERSION:-7}
         environment:
             - ELASTICSEARCH_HOSTS="http://elasticsearch:9200"
@@ -44,7 +44,7 @@ services:
             context: custom/logstash-data-loader
             network: host
             args:
-                - LOGSTASH_VERSION=${LOGSTASH_VERSION:-7.3.2}
+                - LOGSTASH_VERSION=${LOGSTASH_VERSION:-7.12.0}
         env_file: .env_logstash-data-loader_${ENV_FILE_VERSION:-7}
         ports:
             - "${LOGSTASH_PORT:-9600}:9600"

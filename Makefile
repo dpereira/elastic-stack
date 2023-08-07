@@ -15,9 +15,6 @@ endif
 
 ENV_FILE_VERSION=$(shell echo $(VERSION) | sed 's/\([0-9]*\).*/\1/g')
 
-setup:
-	pip install -r requirements.txt
-
 setup_vm_max_map_count:
 	sudo sysctl -w vm.max_map_count=262144
 
@@ -26,20 +23,22 @@ run: env
 	KIBANA_VERSION="$(VERSION)" \
 	LOGSTASH_VERSION="$(VERSION)" \
 	ENV_FILE_VERSION=$(ENV_FILE_VERSION) \
-	docker-compose -f stack/docker-compose.yml -p $(PROJECT_NAME) up
+	docker compose -f stack/docker-compose.yml -p $(PROJECT_NAME) up
 
 build: env
+	COMPOSE_DOCKER_CLI_BUILD=1 \
+	DOCKER_BUILDKIT=1 \
 	ELASTICSEARCH_VERSION="$(VERSION)" \
 	KIBANA_VERSION="$(VERSION)" \
 	LOGSTASH_VERSION="$(VERSION)" \
 	ENV_FILE_VERSION=$(ENV_FILE_VERSION) \
-	docker-compose -f stack/docker-compose.yml -p $(PROJECT_NAME) build
+	docker compose -f stack/docker-compose.yml -p $(PROJECT_NAME) build
 
 stop:
-	docker-compose -f stack/docker-compose.yml -p $(PROJECT_NAME) stop
+	docker compose -f stack/docker-compose.yml -p $(PROJECT_NAME) stop
 
 down:
-	docker-compose -f stack/docker-compose.yml -p $(PROJECT_NAME) down
+	docker compose -f stack/docker-compose.yml -p $(PROJECT_NAME) down
 
 env: 
 	make stack/.env_elasticsearch_$(ENV_FILE_VERSION)

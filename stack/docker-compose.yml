@@ -12,6 +12,7 @@ services:
         environment:
             - node.name=es-stack-1
             - cluster.initial_master_nodes=es-stack-1
+            - bootstrap.system_call_filter=false
             - ELASTIC_USERNAME=admin
             - ELASTIC_PASSWORD=elastic
         ports:
@@ -25,7 +26,6 @@ services:
             - type: bind
               source: ../snapshots
               target: /snapshots
-        user: ${CURRENT_UID}
 
     kibana:
         image: docker.elastic.co/kibana/kibana:${KIBANA_VERSION:-7.3.2}
@@ -38,7 +38,6 @@ services:
             - elasticsearch
         networks:
             - stack
-        user: ${CURRENT_UID}
 
     logstash-data-loader:
         build:
@@ -55,7 +54,6 @@ services:
             - stack
         volumes:
             - ../data:/data
-        user: ${CURRENT_UID}
 
 
     es-loader:
@@ -70,7 +68,6 @@ services:
             - ../index-templates:/index-templates
             - ../bin:/stack-bin
         command: bash /stack-bin/init.sh /index-templates elasticsearch
-        user: ${CURRENT_UID}
 
 networks:
     stack:

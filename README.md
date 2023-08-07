@@ -4,13 +4,7 @@ Sandbox repository for playing around with Elastic Stack projects.
 
 ## Setup
 
-You'll need some python 3+. And:
-
-```
-$ make setup
-```
-
-Current versions of Elasticsearch require a higher `vm.max_map_count` setting then some OS's specify. To workaround
+Current versions of Elasticsearch require a higher `vm.max_map_count` setting then some Linux setups specify by default. To workaround
 that issue, you can run
 
 ```
@@ -32,13 +26,13 @@ Will bring up a single-node ES cluster with a Kibana instance to match.
 Versions default to 7.3.2 but can be changed with:
 
 ```
-$ make run_<version>
+$ VERSION=<version> make run
 ```
 
 E.g.:
 
 ```
-$ make run_6.7.2
+$ VERSION=8.0.0 make run
 ```
 
 If not already created `.env` files are initialized in the `stack` directory:
@@ -49,7 +43,7 @@ If not already created `.env` files are initialized in the `stack` directory:
 These files can be used to customize the configuration of that specific stack component.
 Some are already provided when default config settings are required for the component execution.
 
-To use the instances just:
+To use the instances just hit:
 
  - Elasticsearch: http://localhost:9200
  - Kibana: http://localhost:5601
